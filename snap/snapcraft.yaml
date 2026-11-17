@@ -1,0 +1,27 @@
+name: ubuntu-core-suspend-test
+base: core26
+version: '0.1'
+summary: Verify login1 suspend and resume from a confined snap
+description: |
+  A proof-of-concept that queries systemd-logind suspend capability and
+  inhibitors over the host system D-Bus, requests Suspend(false), and verifies
+  that the same process continues after resume.
+grade: devel
+confinement: strict
+
+apps:
+  suspend-test:
+    command: usr/bin/ubuntu-core-suspend-test
+    plugs:
+      - shutdown
+      - login-session-observe
+
+parts:
+  suspend-test:
+    plugin: make
+    source: .
+    build-packages:
+      - libsystemd-dev
+      - pkg-config
+    stage-packages:
+      - libsystemd0
